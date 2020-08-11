@@ -1,7 +1,7 @@
-The Krypton Project (Web Development Framework)
-Work in progress [demo](https://www.nxte.tech/krypton_test)
-
 <div align="center">
+  <p>The Krypton Project (Web Development Framework)
+    Work in progress [demo](https://www.nxte.tech/krypton_test)
+  </p>
   <img src="https://www.nxte.tech/static/assets/Krypton_Alternate.png" width="192" height="192" alt="Krypton Badge" />
   <h1>Krypton</h1>
 </div>
