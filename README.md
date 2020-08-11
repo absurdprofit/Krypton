@@ -3,7 +3,7 @@ Work in progress [demo](https://www.nxte.tech/krypton_test)
 
 <div align="center">
   <img src="https://www.nxte.tech/static/assets/Krypton_Alternate.png" width="250" height="250" alt="Krypton Badge" />
-  <p>**Krypton**</p>
+  <h1>Krypton</h1>
 </div>
 
 This project is aimed at providing a web user with a native experience. By that I mean, the user should be able to load a Krypton application on a website and feel as if they
