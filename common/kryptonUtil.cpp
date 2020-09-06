@@ -10,7 +10,7 @@ an OpenGL context. The main function of importance is the Init function, as this
 and shader program.
 */
 
-#include "kryptonUtil.h"
+#include "KryptonUtil.h"
 #include "KryptonMath.h"
 #include <iostream>
 #include <stdio.h>
@@ -193,8 +193,8 @@ int Init(ContextData* ContextData)
     //load the vertex/fragment shaders
     GLuint vertexShader;
     GLuint fragmentShader;
-    vertexShader = LoadShader(GL_VERTEX_SHADER, "shaders/vertex.glsl");
-    fragmentShader = LoadShader(GL_FRAGMENT_SHADER, "shaders/fragment.glsl");
+    vertexShader = LoadShader(GL_VERTEX_SHADER, "shaders/shader.vert");
+    fragmentShader = LoadShader(GL_FRAGMENT_SHADER, "shaders/shader.frag");
 
     GLuint *shaders = (GLuint *)calloc(sizeof(GLuint), 2);
     shaders[0] = vertexShader;
@@ -218,7 +218,6 @@ int Init(ContextData* ContextData)
     Matrix<float, 4, 4> orthoMatrix = glOrtho(ContextData->height, 0.0f, 0.0f, ContextData->width, 0.0f, 1000.0f);
     int uniformLoc = glGetUniformLocation(*ContextData->programObjects, "projectionMatrix");
     glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, orthoMatrix.data());
-
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

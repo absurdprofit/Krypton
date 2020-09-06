@@ -1,6 +1,17 @@
-#include "kryptonUtil.h"
+#include "KryptonUtil.h"
 #include "KryptonMath.h"
 #include <vector>
+
+struct Element {
+    Vertex vert;
+    vec3f position;
+    float width;
+    float height;
+    float borderTopRightRadius = 0.0f;
+    float borderTopLeftRadius = 0.0f;
+    float borderBottomRightRadius = 0.0f;
+    float borderBottomLeftRadius = 0.0f;
+};
 
 class Krypton {
 public:
@@ -8,14 +19,20 @@ public:
     void Draw();
     void Update();
     void Clean();
+    void DrawCorner(float, float, float, float, int);
+    void DrawElement(Element);
+    void CreateQuad(vec3f, float, float);
 
 private:
     ContextData* _contextData;
-    GLuint numVertices = 1000;
-    GLuint numIndices = 0;
+    GLuint numQuadVertices = 15000;
+    GLuint numQuadIndices = 0;
+    GLuint numRoundIndices = 0;
     GLuint _batchVBO;
     GLuint _batchIBO;
-    std::vector<GLuint> _indices;
-    std::vector<Vertex> _vertices;
+    std::vector<GLuint> _quad_indices;
+    std::vector<Vertex> _quad_vertices;
+    std::vector<Vertex> _round_vertices;
+    std::vector<GLuint> _round_indices;
     bool running = false;
 };
