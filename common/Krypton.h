@@ -19,13 +19,16 @@ public:
     void Draw();
     void Update();
     void Clean();
-    void DrawCorner(float, float, float, float, int);
+    void DrawCorner(float, float, float, float);
     void DrawElement(Element);
     void CreateQuad(vec3f, float, float);
 
 private:
     ContextData* _contextData;
-    GLuint numQuadVertices = 15000;
+    GLuint numQuadVertices = 0;
+    GLuint numRoundVertices = 0;
+    const GLuint maxVertices = 15000;
+    const GLuint numRoundSegments = 499;
     GLuint numQuadIndices = 0;
     GLuint numRoundIndices = 0;
     GLuint _batchVBO;
