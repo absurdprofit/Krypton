@@ -1,3 +1,5 @@
+#ifndef __KRYPTON_UTIL__
+#define __KRYPTON_UTIL__
 #ifdef __EMSCRIPTEN__
 #include <SDL.h>
 #define GL_GLEXT_PROTOTYPES 1
@@ -18,7 +20,7 @@ typedef struct ContextData
     SDL_Renderer *renderer;
     GLint programObjectCounter = 0;
     GLuint *programObjects;
-    GLchar* windowName;
+    GLchar *windowName;
 } ContextData;
 
 typedef struct
@@ -36,7 +38,9 @@ typedef struct
 
 GLint CheckStatus(GLenum type, const GLuint *object);
 GLuint LoadShader(GLenum type, const char *shaderName);
-GLuint* LoadProgram(GLuint *shaders);
+GLuint *LoadProgram(GLuint *shaders);
 GLvoid LoadAttribute(GLattrib *attribute);
 GLint Init(ContextData *ContextData);
-GLvoid _resize(ContextData* ContextData, int w, int h);
+GLvoid _resize(ContextData *ContextData, int w, int h);
+
+#endif
