@@ -154,6 +154,22 @@ struct Vector
 		return tmp;
 	}
 
+	bool operator==(const Vector& rhs) {
+		if (x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	bool operator>(const Vector& rhs) {
+		if (x > rhs.x || y > rhs.y || z > rhs.z || w > rhs.w) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	T operator[](int index)
 	{
 		switch (index)

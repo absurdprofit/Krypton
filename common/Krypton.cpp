@@ -107,20 +107,23 @@ void Krypton::Update()
     _geometry_data->numRoundVertices(0);
 
     Element circle(_geometry_data, _contextData->width / 2.0f, _contextData->height / 2.0f, 0.0f, 40.0f, 40.0f);
-    circle.topLeftRadius(40.0f, 0.0f);
-    circle.topRightRadius(40.0f, 0.0f);
-    circle.bottomRightRadius(40.0f, 0.0f);
-    circle.bottomLeftRadius(40.0f, 0.0f);
+    circle.colour(1.0f, 0.0f, 0.0f, 1.0f);
+    circle.topLeftRadius(20.0f, 0.0f);
+    circle.topRightRadius(20.0f, 0.0f);
+    circle.bottomRightRadius(20.0f, 0.0f);
+    circle.bottomLeftRadius(20.0f, 0.0f);
     circle.Render();
 
     Element square(_geometry_data, 50.0f, 50.0f, 0.0f, 40.0f, 40.0f);
+    square.rgba(255, 107, 158, 255);
     square.topLeftRadius(10.0f, 0.0f);
     square.topRightRadius(20.0f, 0.0f);
     square.bottomRightRadius(20.0f, 0.0f);
     square.bottomLeftRadius(0.0f, 0.0f);
     square.Render();
 
-    Element footer(_geometry_data, _contextData->width / 2.0f, _contextData->height - 40.0f, 0.0f, _contextData->width, 40.0f);
+    Element footer(_geometry_data, _contextData->width / 2.0f, _contextData->height - 20.0f, 0.0f, _contextData->width, 40.0f);
+    footer.colour(0X2ee6dc);
     footer.Render();
 
     glUseProgram(*_contextData->programObjects);

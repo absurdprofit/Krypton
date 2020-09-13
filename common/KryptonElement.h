@@ -14,7 +14,6 @@ class Element
 private:
     Geometry* _geometry_data;
     Vertex vert;
-    vec3f position;
     float width;
     float height;
     float borderTopLeftRadiusX = 0.0f;
@@ -32,8 +31,11 @@ public:
     void topRightRadius(float, float);
     void bottomLeftRadius(float, float);
     void bottomRightRadius(float, float);
-    void DrawCorner(float, float, float, float, OFFSET);
+    void DrawCorner(float, float, float, float, vec4f, OFFSET);
     void CreateQuad(Vertex v1, Vertex v2, Vertex v3, Vertex v4);
+    void colour(float, float, float, float);
+    void colour(int);
+    void rgba(float, float, float, float);
 
     void Render();
 };
