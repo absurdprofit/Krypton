@@ -32,6 +32,8 @@ int main() {
     Krypton krypton(&ContextData);
     krypton.Draw();
 
+    std::cout << "END" << std::endl;
+
     return 1;
 }
 

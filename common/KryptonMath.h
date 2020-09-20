@@ -225,8 +225,8 @@ class Geometry
 private:
 	GLuint _numQuadVertices = 0;
 	GLuint _numRoundVertices = 0;
-	const GLuint _maxVertices = 15000;
-	const GLuint _numRoundSegments = 499;
+	const GLuint _maxVertices = 100000;
+	const GLuint _numRoundSegments = 4999;
 	GLuint _numQuadIndices = 0;
 	GLuint _numRoundIndices = 0;
 	GLuint _batchVBO;

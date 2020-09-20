@@ -156,39 +156,33 @@ GLuint* LoadProgram(GLuint *shaders)
     }
 }
 
-//basically obsoleted since batch rendering was added
-// GLvoid LoadAttribute(GLattrib *attribute)
-// {
-//     switch (attribute->type)
-//     {
-//     case GL_FLOAT:
-//         //create vertex array buffer object and copy the vertex data to it
-//         GLuint vbo;
-//         glGenBuffers(1, &vbo);
-//         glBindBuffer(attribute->target, vbo);
-//         glBufferData(attribute->target, attribute->size, attribute->attributeData, attribute->usage);
-//         glEnableVertexAttribArray(attribute->location);
-//         glVertexAttribPointer(attribute->location, attribute->dimensions, GL_FLOAT, GL_FALSE, 0, 0);
-//         break;
-//     }
-// }
-
 //initialize shader and program the object
 int Init(ContextData* ContextData)
 {
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
     //create window and opengl rendering context/renderer
     static SDL_Window *wnd(SDL_CreateWindow(ContextData->windowName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ContextData->width, ContextData->height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN));
     ContextData->wnd = wnd;
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    SDL_GL_SetSwapInterval(0);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     static SDL_GLContext glContext = SDL_GL_CreateContext(wnd);
     ContextData->glContext = &glContext;
+
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GL_SetSwapInterval(0);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+    
     static SDL_Renderer *renderer = SDL_CreateRenderer(wnd, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
     ContextData->renderer = renderer;
+    
 
     //load the vertex/fragment shaders
     GLuint vertexShader;
@@ -222,6 +216,8 @@ int Init(ContextData* ContextData)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthMask(GL_FALSE);
+    glEnable(GL_SAMPLE_COVERAGE);
+    glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
     return 1;
 }
 

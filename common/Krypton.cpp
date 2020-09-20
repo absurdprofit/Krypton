@@ -10,21 +10,10 @@ draw to the canvas, process events, access web APIs, so on and so forth. It will
 "retained" in some arbitrary data structure such as a widget tree (as implemented in Flutter).
 
 TODO:
-1. Implement second buffer for rounded geometry.
-2. Implement draw call for rounded buffer.
-3. Implement basic shape made of 5 quads that can depict a square, a circle, or a rectangle.
-    --- -------- ---
-    |c1|    1   | c2|
-    --- -------- ---
-    |  |        |   |
-    | 3|    2   | 4 |
-    |  |        |   |
-    --- -------- ---
-    |c3|    5   | c4|
-    --- -------- ---
-    Quads 1-5 make up main structure of the element.
-    Sections marked c1-c4 are possible rounded corners. If radius is 0, c1 and c2 are apart of quad 1,
-    c3 and c4 are apart of quad 5.
+1.KryptonTimer
+2. KryptonEvents
+3. KryptonLayout engine
+4. Stroke text
 */
 #ifndef __KRYPTON_H__
 #define __KRYPTON_H__
@@ -47,7 +36,6 @@ Krypton::Krypton(ContextData *ContextData)
     static Geometry geometry_data(_contextData);
     _geometry_data = &geometry_data;
 }
-
 
 std::function<void()> loop;
 void main_loop()
@@ -101,17 +89,18 @@ void Krypton::Draw()
 
 void Krypton::Update()
 {
+
     _geometry_data->numQuadIndices(0);
     _geometry_data->numQuadVertices(0);
     _geometry_data->numRoundIndices(0);
     _geometry_data->numRoundVertices(0);
 
-    Element circle(_geometry_data, _contextData->width / 2.0f, _contextData->height / 2.0f, 0.0f, 40.0f, 40.0f);
+    Element circle(_geometry_data, _contextData->width / 2.0f, _contextData->height / 2.0f, 0.0f, 80.0f, 80.0f);
     circle.colour(1.0f, 0.0f, 0.0f, 1.0f);
-    circle.topLeftRadius(20.0f, 0.0f);
-    circle.topRightRadius(20.0f, 0.0f);
-    circle.bottomRightRadius(20.0f, 0.0f);
-    circle.bottomLeftRadius(20.0f, 0.0f);
+    circle.topLeftRadius(40.0f, 0.0f);
+    circle.topRightRadius(40.0f, 0.0f);
+    circle.bottomRightRadius(40.0f, 0.0f);
+    circle.bottomLeftRadius(40.0f, 0.0f);
     circle.Render();
 
     Element square(_geometry_data, 50.0f, 50.0f, 0.0f, 40.0f, 40.0f);

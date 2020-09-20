@@ -12,7 +12,7 @@ for (dirpath, dirnames, filenames) in os.walk(os.getcwd()):
             command += '"'
 
 
-command += " --bind -s USE_SDL=2 -s MAX_WEBGL_VERSION=2 -s EXIT_RUNTIME=1  --preload-file shaders -o app.js"
+command += " --bind -s USE_SDL=2 -s USE_FREETYPE=1 -s MIN_WEBGL_VERSION=1 -s MAX_WEBGL_VERSION=1 -s EXIT_RUNTIME=1  --preload-file shaders -o app.js"
 os.system(f'cmd /c {command}')
 
 js = open('app.js', "r")
