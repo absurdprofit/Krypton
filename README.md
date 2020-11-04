@@ -22,10 +22,15 @@ The target platform for this project is the web, but specifically the mobile sub
 
 <h1>Section 2.0</h1>
 <h3>Functional Requirements:</h3>
-1. Events are to be captured by a top layer invisible HTML element then passed to C++ using an event callback that calls a C++ function to append the new event to an event queue for processing by the application code. 
-2. When an application is compiled with Krypton development tools there should be the accompanying HTML + Javascript code that sets up the environment for the application in the web browser.
-3. The system must target Web GL 2.0 which is the C++/C equivalent to Open GL ES 2.0.
-
+<ol>
+  <li>
+    <p>1. Events are to be captured by a top layer invisible HTML element then passed to C++ using an event callback that calls a C++ function to append the new event to an event queue for processing by the application code. <span style="color: red;"><b>(workaround since currently there is no comprehensive API for communicating with mobile soft keyboard on the web)</b></span></p>
+  </li>
+  <li>
+    <p>2. When an application is compiled with Krypton development tools there should be the accompanying HTML + Javascript code that sets up the environment for the application in the web browser.</p>
+  </li>
+  <li><p>3. The system must target Web GL 2.0 which is the C++/C equivalent to Open GL ES 2.0.</p></li>
+</ol>
 
 <h1>Section 2.1</h1>
 <h3>Non-Functional Requirements:</h3>
