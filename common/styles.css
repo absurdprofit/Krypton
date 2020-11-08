@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.warning {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+#top-layer {
+  background-color: transparent !important;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: 1000;
+}
+#top-layer:focus,
+#top-layer:active,
+#top-layer::after {
+  background-color: transparent !important;
+  color: transparent;
+  outline: none;
+}

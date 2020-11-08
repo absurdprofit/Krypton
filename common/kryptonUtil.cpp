@@ -187,8 +187,8 @@ int Init(ContextData* ContextData)
     //load the vertex/fragment shaders
     GLuint vertexShader;
     GLuint fragmentShader;
-    vertexShader = LoadShader(GL_VERTEX_SHADER, "shaders/shader.vert");
-    fragmentShader = LoadShader(GL_FRAGMENT_SHADER, "shaders/shader.frag");
+    vertexShader = LoadShader(GL_VERTEX_SHADER, "assets/shaders/shader.vert");
+    fragmentShader = LoadShader(GL_FRAGMENT_SHADER, "assets/shaders/shader.frag");
 
     GLuint *shaders = (GLuint *)calloc(sizeof(GLuint), 2);
     shaders[0] = vertexShader;
@@ -210,7 +210,7 @@ int Init(ContextData* ContextData)
 
     //set the ortho matrix in the vertex shader
     Matrix<float, 4, 4> orthoMatrix = glOrtho(ContextData->height, 0.0f, 0.0f, ContextData->width, 0.0f, 1000.0f);
-    int uniformLoc = glGetUniformLocation(*ContextData->programObjects, "projectionMatrix");
+    int uniformLoc = glGetUniformLocation(*ContextData->programObjects, "u_projectionMatrix");
     glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, orthoMatrix.data());
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);

@@ -35,6 +35,9 @@ Krypton::Krypton(ContextData *ContextData)
 
     static Geometry geometry_data(_contextData);
     _geometry_data = &geometry_data;
+
+    static Text text(_contextData);
+    _text = &text;
 }
 
 std::function<void()> loop;
@@ -43,10 +46,11 @@ void main_loop()
     loop();
 }
 
-void Krypton::Draw()
+void Krypton::Run()
 {
 
     running = true;
+
 
     loop = [&] {
         if (!running)
@@ -54,29 +58,47 @@ void Krypton::Draw()
             SDL_Quit();
         }
 
+        SDL_Event e;
+
+        while(SDL_PollEvent(&e)) {
+            switch (e.type) {
+                case SDL_KEYDOWN:
+                    std::cout << "Key Down" << std::endl;
+                    break;
+                
+                case SDL_MOUSEBUTTONDOWN:
+                    std::cout << "Mouse Button Down" << std::endl;
+                    break;
+                
+                case SDL_QUIT:
+                    Clean();
+                    break;
+            }
+        }
+
         //clear the colour buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
         Update();
 
-        //quad draw call
-        //bind index and vertex buffer on every tick
-        glBindBuffer(GL_ARRAY_BUFFER, _geometry_data->VBO());
-        glBufferSubData(GL_ARRAY_BUFFER, 0, _geometry_data->numQuadVertices() * sizeof(Vertex), (const void *)_geometry_data->quadVerticesData());
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _geometry_data->IBO());
-        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, _geometry_data->quadIndicesSize() * sizeof(GLuint), (const void *)_geometry_data->quadIndicesData());
-        glDrawElements(GL_TRIANGLES, _geometry_data->numQuadIndices(), GL_UNSIGNED_INT, NULL);
-
         //round draw call
         //bind index and vertex buffer on every tick
         glBindBuffer(GL_ARRAY_BUFFER, _geometry_data->VBO());
-        glBufferSubData(GL_ARRAY_BUFFER, 0, _geometry_data->roundVerticesSize() * sizeof(Vertex), (const void *)_geometry_data->roundVerticesData());
+        glBufferSubData(GL_ARRAY_BUFFER, 0, _geometry_data->verticesSize() * sizeof(Vertex), (const void *)_geometry_data->verticesData());
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _geometry_data->IBO());
-        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, _geometry_data->roundIndicesSize() * sizeof(GLuint), (const void *)_geometry_data->roundIndicesData());
-        glDrawElements(GL_TRIANGLES, _geometry_data->numRoundIndices(), GL_UNSIGNED_INT, NULL);
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, _geometry_data->indicesSize() * sizeof(GLuint), (const void *)_geometry_data->indicesData());
+        glDrawElements(GL_TRIANGLES, _geometry_data->numIndices(), GL_UNSIGNED_INT, NULL);
 
+        //quad draw call
+        //bind index and vertex buffer on every tick
+        // glBindBuffer(GL_ARRAY_BUFFER, _geometry_data->VBO());
+        // glBufferSubData(GL_ARRAY_BUFFER, 0, _geometry_data->numQuadVertices() * sizeof(Vertex), (const void *)_geometry_data->quadVerticesData());
+
+        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _geometry_data->IBO());
+        // glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, _geometry_data->quadIndicesSize() * sizeof(GLuint), (const void *)_geometry_data->quadIndicesData());
+        // glDrawElements(GL_TRIANGLES, _geometry_data->numQuadIndices(), GL_UNSIGNED_INT, NULL);
+        
         SDL_GL_SwapWindow(_contextData->wnd);
     };
 #ifdef __EMSCRIPTEN__
@@ -87,13 +109,12 @@ void Krypton::Draw()
 #endif
 }
 
+
 void Krypton::Update()
 {
-
-    _geometry_data->numQuadIndices(0);
-    _geometry_data->numQuadVertices(0);
-    _geometry_data->numRoundIndices(0);
-    _geometry_data->numRoundVertices(0);
+    
+    _geometry_data->numIndices(0);
+    _geometry_data->numVertices(0);
 
     Element circle(_geometry_data, _contextData->width / 2.0f, _contextData->height / 2.0f, 0.0f, 80.0f, 80.0f);
     circle.colour(1.0f, 0.0f, 0.0f, 1.0f);
@@ -115,6 +136,10 @@ void Krypton::Update()
     footer.colour(0X2ee6dc);
     footer.Render();
 
+    Element Char(_geometry_data, _text->Characters[((int)'J') - 33], 90.0f, 90.0f, -20.0f);
+    Char.colour(0X5C257F);
+    Char.scale(3.0);
+    Char.Render();
     glUseProgram(*_contextData->programObjects);
 }
 
@@ -122,5 +147,6 @@ void Krypton::Clean()
 {
     running = false;
     free(_contextData->programObjects);
+    SDL_Quit();
 }
 #endif

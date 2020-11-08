@@ -202,6 +202,10 @@ struct Vertex
 {
 	vec4f colour;
 	vec3f position;
+	GLuint textureID = 0;
+	vec4f textColour = { 0.0f, 0.0f, 0.0f, 0.0f };
+	vec2f textCoords = { 0.0f , 0.0f };
+	GLuint samepler2D = 0;
 };
 
 //creates an orthoganol projection matrix, mainly used to set our projection matrix uniform
@@ -223,46 +227,33 @@ inline Matrix<float, 4, 4> glOrtho(
 class Geometry
 {
 private:
-	GLuint _numQuadVertices = 0;
-	GLuint _numRoundVertices = 0;
-	const GLuint _maxVertices = 100000;
-	const GLuint _numRoundSegments = 4999;
-	GLuint _numQuadIndices = 0;
-	GLuint _numRoundIndices = 0;
+	GLuint _numVertices = 0;
+	const GLuint _maxVertices = 200000;
+	const GLuint _numRoundSegments = 499;
+	GLuint _numIndices = 0;
 	GLuint _batchVBO;
 	GLuint _batchIBO;
-	std::vector<GLuint> _quad_indices;
-	std::vector<Vertex> _quad_vertices;
-	std::vector<Vertex> _round_vertices;
-	std::vector<GLuint> _round_indices;
+	std::vector<GLuint> _indices;
+	std::vector<Vertex> _vertices;
 public:
 	Geometry(ContextData*);
-	void addQuadVertices(int);
-	void addRoundVertices(int);
-	void addQuadIndices(int);
-	void addRoundIndices(int);
-	void addRoundVertex(int, Vertex);
-	void addQuadVertex(int, Vertex);
-	const GLuint numQuadVertices();
-	void numQuadVertices(GLuint);
-	const GLuint numRoundVertices();
-	void numRoundVertices(GLuint);
+	const GLuint lastIndex();
+	void addVertices(int);
+	void addIndices(int);
+	void addVertex(int, Vertex);
+	void addIndex(int, GLuint);
+	const GLuint numVertices();
+	void numVertices(GLuint);
 	const GLuint maxVertices();
 	const GLuint numRoundSegments();
-	const GLuint numQuadIndices();
-	void numQuadIndices(GLuint);
-	const GLuint numRoundIndices();
-	void numRoundIndices(GLuint);
+	const GLuint numIndices();
+	void numIndices(GLuint);
 	const GLuint VBO();
 	const GLuint IBO();
-	const GLuint* quadIndicesData();
-	const GLuint quadIndicesSize();
-	const GLuint* roundIndicesData();
-	const GLuint roundIndicesSize();
-	const Vertex* quadVerticesData();
-	const GLuint quadVerticesSize();
-	const Vertex* roundVerticesData();
-	const GLuint roundVerticesSize();
+	const GLuint* indicesData();
+	const GLuint indicesSize();
+	const Vertex* verticesData();
+	const GLuint verticesSize();
 };
 
 #endif

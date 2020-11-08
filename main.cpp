@@ -16,61 +16,44 @@ be given an entry point that gets invoked by Krypton's main entry point.
 #include <iostream>
 #include "common/Krypton.h"
 
-
-int main() {
-    int w = EM_ASM_INT({
-        return screen.width
-    });
+int main()
+{
+    int w = EM_ASM_INT({return screen.width});
     int h = EM_ASM_INT({
         return screen.height;
     });
-    ContextData ContextData;
-    ContextData.width = w;
-    ContextData.height = h;
-    ContextData.windowName = (GLchar*)"Skeleton";
-    
-    Krypton krypton(&ContextData);
-    krypton.Draw();
 
-    std::cout << "END" << std::endl;
+    int run = EM_ASM_INT({
+        if (document.getElementById('warning'))
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    });
+    if (!run)
+    {
+        ContextData ContextData;
+        ContextData.width = w;
+        ContextData.height = h;
+        ContextData.windowName = (GLchar *)"Skeleton";
+
+        Krypton krypton(&ContextData);
+        krypton.Run();
+        std::cout << "END" << std::endl;
+    }
 
     return 1;
 }
 
-int _clean(int x, int y, int w, int h)
+void _clean()
 {
-    exit(0);
+    emscripten_cancel_main_loop();
 }
-
-bool _click(float x, float y, int w, int h) {
-    // if (x <= (w / 2)) {
-    //     x /= (w / 2);
-    //     x -= 1;
-    // } else {
-    //     x -= (w / 2);
-    //     x /= (w / 2);
-    // }
-    // if (y <= (h / 2)) {
-    //     y /= (h / 2);
-    //     y -= 1;
-    // } else {
-    //     y -= (h / 2);
-    //     y /= (h / 2);
-    // }
-    // std::cout << x << ", " << y << std::endl;
-    // if ((x <= 0.5 && x >= 0.0) && (-y <= 0.5 && -y >= 0.0)) {
-    //     std::cout << "Square Clicked!" << std::endl;
-    //     return true;
-    // } else {
-    //     return false;
-    // }
-    return false;
-}
-
-//semantics for registering callbacks, this will all be done behind the scenes
 
 EMSCRIPTEN_BINDINGS(my_module)
 {
     emscripten::function("clean", &_clean);
-    emscripten::function("click", &_click);
 }

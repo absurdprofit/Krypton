@@ -1,6 +1,10 @@
 #ifndef __KRYPTON_UTIL__
 #define __KRYPTON_UTIL__
 #ifdef __EMSCRIPTEN__
+
+#define KryptonRaiseError() \
+    std::cerr << "Error at line: " << __LINE__ << "\nIn file: " << __FILE__ << "\nIn function: " << __func__ << std::endl
+
 #include <SDL.h>
 #define GL_GLEXT_PROTOTYPES 1
 #include <SDL_opengles2.h>

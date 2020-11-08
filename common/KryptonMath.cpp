@@ -1,5 +1,5 @@
 #include "KryptonMath.h"
-
+#include <iostream>
 Geometry::Geometry(ContextData* _contextData)
 {
     GLuint size = ((_maxVertices / (_numRoundSegments + 1)) * ((_numRoundSegments - 1) * 3) > (_maxVertices / 4) * 6 ? (_maxVertices / (_numRoundSegments + 1)) * ((_numRoundSegments - 1) * 3) : (_maxVertices / 4) * 6);
@@ -22,61 +22,29 @@ Geometry::Geometry(ContextData* _contextData)
     glEnableVertexAttribArray(loc);
     glVertexAttribPointer(loc, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void *)offsetof(Vertex, colour));
 
-    //populate create _quad_indices
-    GLuint offset = 0;
-    //number of quads * 6 indices that make up a quad
-    _quad_indices.resize(size, 0);
-    Vertex fill;
-    _quad_vertices.resize(_maxVertices, fill);
-    for (int i = 0; i < size; i += 6)
-    {
-        _quad_indices[i + 0] = 0 + offset;
-        _quad_indices[i + 1] = 1 + offset;
-        _quad_indices[i + 2] = 2 + offset;
+    loc = glGetAttribLocation(*_contextData->programObjects, "a_textCoords");
+    glEnableVertexAttribArray(loc);
+    glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void *)offsetof(Vertex, textCoords));
 
-        _quad_indices[i + 3] = 2 + offset;
-        _quad_indices[i + 4] = 3 + offset;
-        _quad_indices[i + 5] = 1 + offset;
+    loc = glGetAttribLocation(*_contextData->programObjects, "a_textColour");
+    glEnableVertexAttribArray(loc);
+    glVertexAttribPointer(loc, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void *)offsetof(Vertex, textColour));
+    
 
-        offset += 4;
-    }
+    loc = glGetUniformLocation(*_contextData->programObjects, "u_texture");
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glUniform1i(loc, 0);
 
-    //number of rounded corners * number for indices
-    //took way too fucking long
-    _round_indices.resize(size, 0);
-    _round_vertices.resize(_maxVertices, fill);
-    offset = 1;
-    int centre = 0;
-    int count = 0;
-    for (int i = 0; i < size; i += (_numRoundSegments - 1) * 3)
-    {
-        for (int j = i; j < i + ((_numRoundSegments - 1) * 3); j += 3)
-        {
-            _round_indices[j + 0] = centre;
-            _round_indices[j + 1] = offset;
-            _round_indices[j + 2] = ++offset;
-            count += 3;
-        }
-        centre = ++offset;
-        offset++;
-    }
+    _vertices.resize(_maxVertices);
 }
-
-const GLuint Geometry::numQuadVertices()
+const GLuint Geometry::numVertices()
 {
-    return _numQuadVertices;
+    return _numVertices;
 }
-void Geometry::numQuadVertices(GLuint numVertices)
+void Geometry::numVertices(GLuint numVertices)
 {
-    _numQuadVertices = numVertices;
-}
-const GLuint Geometry::numRoundVertices()
-{
-    return _numRoundVertices;
-}
-void Geometry::numRoundVertices(GLuint numVertices)
-{
-    _numRoundVertices = numVertices;
+    _numVertices = numVertices;
 }
 const GLuint Geometry::maxVertices()
 {
@@ -86,21 +54,13 @@ const GLuint Geometry::numRoundSegments()
 {
     return _numRoundSegments;
 }
-const GLuint Geometry::numQuadIndices()
+const GLuint Geometry::numIndices()
 {
-    return _numQuadIndices;
+    return _numIndices;
 }
-void Geometry::numQuadIndices(GLuint numIndices)
+void Geometry::numIndices(GLuint numIndices)
 {
-    _numQuadIndices = numIndices;
-}
-const GLuint Geometry::numRoundIndices()
-{
-    return _numRoundIndices;
-}
-void Geometry::numRoundIndices(GLuint numIndices)
-{
-    _numRoundIndices = numIndices;
+    _numIndices = numIndices;
 }
 const GLuint Geometry::VBO()
 {
@@ -110,61 +70,38 @@ const GLuint Geometry::IBO()
 {
     return _batchIBO;
 }
-const GLuint* Geometry::quadIndicesData()
+const GLuint* Geometry::indicesData()
 {
-    return _quad_indices.data();
+    return _indices.data();
 }
-const GLuint Geometry::quadIndicesSize()
+const GLuint Geometry::indicesSize()
 {
-    return _quad_indices.size();
+    return _indices.size();
 }
-const GLuint* Geometry::roundIndicesData()
+const Vertex* Geometry::verticesData()
 {
-    return _round_indices.data();
+    return _vertices.data();
 }
-const GLuint Geometry::roundIndicesSize()
+const GLuint Geometry::verticesSize()
 {
-    return _round_indices.size();
+    return _vertices.size();
 }
-const Vertex* Geometry::quadVerticesData()
+void Geometry::addVertices(int numVertices)
 {
-    return _quad_vertices.data();
+    _numVertices += numVertices;
 }
-const GLuint Geometry::quadVerticesSize()
+void Geometry::addIndices(int numIndices)
 {
-    return _quad_vertices.size();
+    _indices.resize(_numIndices + numIndices);
+    _numIndices += numIndices;
 }
-const Vertex* Geometry::roundVerticesData()
+void Geometry::addVertex(int index, Vertex v)
 {
-    return _round_vertices.data();
+    _vertices[index] = v;
 }
-const GLuint Geometry::roundVerticesSize()
-{
-    return _round_vertices.size();
+void Geometry::addIndex(int _index, GLuint index) {
+    _indices[_index] = index;
 }
-
-void Geometry::addQuadVertices(int numVertices)
-{
-    _numQuadVertices += numVertices;
+const GLuint Geometry::lastIndex() {
+    return _indices[_numIndices - (_numIndices > 0 ? 1 : 0)];
 }
-void Geometry::addRoundVertices(int numVertices)
-{
-    _numRoundVertices += numVertices;
-}
-void Geometry::addQuadIndices(int numIndices)
-{
-    _numQuadIndices += numIndices;
-}
-void Geometry::addRoundIndices(int numIndices)
-{
-    _numRoundIndices += numIndices;
-}
-void Geometry::addRoundVertex(int index, Vertex v)
-{
-    _round_vertices[index] = v;
-}
-void Geometry::addQuadVertex(int index, Vertex v)
-{
-    _quad_vertices[index] = v;
-}
-
