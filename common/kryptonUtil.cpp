@@ -43,7 +43,7 @@ GLint CheckStatus(GLenum type, const GLuint *object)
             {
                 glGetProgramInfoLog(*object, infoLen, NULL, infoLog);
                 std::cout << "Error linking program: \n"
-                    << infoLog << std::endl;
+                          << infoLog << std::endl;
 
                 free(infoLog);
             }
@@ -64,7 +64,7 @@ GLint CheckStatus(GLenum type, const GLuint *object)
                 glGetShaderInfoLog(*object, infoLen, NULL, infoLog);
 
                 std::cout << "Error compiling shader:\n"
-                    << infoLog << std::endl;
+                          << infoLog << std::endl;
                 free(infoLog);
             }
 
@@ -130,10 +130,10 @@ GLuint LoadShader(GLenum type, const char *shaderName)
 
 // shaders[0] vertex shader, shaders[1] fragment shader
 //
-GLuint* LoadProgram(GLuint *shaders)
+GLuint *LoadProgram(GLuint *shaders)
 {
     //create the program object
-    GLuint* programObject = (GLuint*)calloc(sizeof(GLuint), 1);
+    GLuint *programObject = (GLuint *)calloc(sizeof(GLuint), 1);
     *programObject = glCreateProgram();
 
     if (*programObject == 0)
@@ -157,14 +157,19 @@ GLuint* LoadProgram(GLuint *shaders)
 }
 
 //initialize shader and program the object
-int Init(ContextData* ContextData)
+int Init(ContextData *ContextData)
 {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+
     //create window and opengl rendering context/renderer
     static SDL_Window *wnd(SDL_CreateWindow(ContextData->windowName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ContextData->width, ContextData->height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN));
     ContextData->wnd = wnd;
+
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
     static SDL_GLContext glContext = SDL_GL_CreateContext(wnd);
     ContextData->glContext = &glContext;
@@ -173,16 +178,15 @@ int Init(ContextData* ContextData)
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    // SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    // SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetSwapInterval(0);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    // SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-    
+
     static SDL_Renderer *renderer = SDL_CreateRenderer(wnd, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
     ContextData->renderer = renderer;
-    
 
     //load the vertex/fragment shaders
     GLuint vertexShader;
@@ -193,7 +197,6 @@ int Init(ContextData* ContextData)
     GLuint *shaders = (GLuint *)calloc(sizeof(GLuint), 2);
     shaders[0] = vertexShader;
     shaders[1] = fragmentShader;
-
 
     ContextData->programObjects = LoadProgram(shaders);
     ContextData->programObjectCounter += 1;
@@ -221,7 +224,8 @@ int Init(ContextData* ContextData)
     return 1;
 }
 
-GLvoid _resize(ContextData* ContextData, int w, int h) {
+GLvoid _resize(ContextData *ContextData, int w, int h)
+{
     ContextData->width = w;
     ContextData->height = h;
     SDL_SetWindowSize(ContextData->wnd, ContextData->width, ContextData->height);

@@ -277,7 +277,7 @@ void Element::DrawCorner(float cx, float cy, float rx, float ry, vec4f colour, O
     //populate vertices
     if (rx > 0.0f || ry > 0.0f)
     {
-        for (int i = 0; i < numRoundSegments; i++)
+        for (int i = 0; i < numRoundSegments + 1; i++)
         {
             float theta = (3.1415926f / 2.0f) * (float)i / (float)numRoundSegments;
             float x = rx * cosf(tau + theta);
