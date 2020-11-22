@@ -277,7 +277,7 @@ void Element::DrawCorner(float cx, float cy, float rx, float ry, vec4f colour, O
     //populate vertices
     if (rx > 0.0f || ry > 0.0f)
     {
-        for (int i = 0; i < numRoundSegments + 1; i++)
+        for (int i = 0; i <= numRoundSegments; i++)
         {
             float theta = (3.1415926f / 2.0f) * (float)i / (float)numRoundSegments;
             float x = rx * cosf(tau + theta);
@@ -291,7 +291,7 @@ void Element::DrawCorner(float cx, float cy, float rx, float ry, vec4f colour, O
 
         const GLuint centre = numVertices;
         GLuint offset = centre + 1;
-        for (int j = numIndices; j < numIndices + (numRoundSegments - 1) * 3; j += 3)
+        for (int j = numIndices; j <= numIndices + (numRoundSegments - 1) * 3; j += 3)
         {
             _geometry_data->addIndex(j + 0, centre);
             _geometry_data->addIndex(j + 1, offset);
@@ -304,7 +304,7 @@ void Element::DrawCorner(float cx, float cy, float rx, float ry, vec4f colour, O
 void Element::CreateQuad(Vertex v1, Vertex v2, Vertex v3, Vertex v4)
 {
     vec3f test_position = {0.0f, 0.0f, 0.0f};
-    if (v1.position > test_position && v2.position > test_position && v3.position > test_position && v4.position > test_position)
+    // if (v1.position > test_position && v2.position > test_position && v3.position > test_position && v4.position > test_position)
     {
         const GLuint numVertices = _geometry_data->numVertices();
         const GLuint numIndices = _geometry_data->numIndices();

@@ -46,6 +46,9 @@ void main_loop()
     loop();
 }
 
+int x = 0;
+int y = 0;
+
 void Krypton::Run()
 {
 
@@ -67,6 +70,8 @@ void Krypton::Run()
                     break;
                 
                 case SDL_MOUSEBUTTONDOWN:
+                    SDL_GetMouseState(&x, &y);
+                    std::cout << x << ", " << y << std::endl;
                     std::cout << "Mouse Button Down" << std::endl;
                     break;
                 
@@ -135,6 +140,14 @@ void Krypton::Update()
     Element footer(_geometry_data, _contextData->width / 2.0f, _contextData->height - 20.0f, 0.0f, _contextData->width, 40.0f);
     footer.colour(0X2ee6dc);
     footer.Render();
+
+    Element shape(_geometry_data, (float)x, (float)y, 0.0f, 80.0f, 80.0f);
+    shape.rgba(0, 0, 255, 255);
+    shape.topLeftRadius(25.0f, 0.0f);
+    shape.topRightRadius(25.0f, 0.0f);
+    shape.bottomLeftRadius(25.0f, 0.0f);
+    shape.bottomRightRadius(25.0f, 0.0f);
+    shape.Render();
 
     Element Char(_geometry_data, _text->Characters[((int)'J') - 33], 90.0f, 90.0f, -20.0f);
     Char.colour(0X5C257F);
